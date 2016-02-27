@@ -8,7 +8,7 @@
 # Short-Description: Start/stop was liberty profile
 ### END INIT INFO
 #
-# IBM wasLP	This init.d script starts the IBM HTTP Server
+# IBM wasLP	This init.d script starts the IBM wasLP Server
 
 # Find the name of the script
 NAME=`basename $0`
