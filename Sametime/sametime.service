@@ -1,0 +1,20 @@
+Description=HCL Sametime Community Server (notes)
+After=syslog.target network.target
+
+[Service]
+User=notes
+ExecStart=/local/notesdata/ststart
+ExecStop=/local/notesdata/ststart stop
+Type=simple
+LimitNOFILE=65535
+LimitNPROC=8000
+TasksMax=8000
+
+# to make sure startup compact operations can finish
+TimeoutSec=600
+TimeoutStopSec=300
+KillMode=none
+RemainAfterExit=no
+
+[Install]
+WantedBy=multi-user.target
