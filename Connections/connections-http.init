@@ -1,0 +1,100 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          ibm-http
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     3 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop IBM HTTP Server
+### END INIT INFO
+#
+# IBM HTTP	This init.d script starts the IBM HTTP Server
+
+# Find the name of the script
+NAME=`basename $0`
+ihs_Path=/opt/Connections/HTTPServer
+
+
+IBMHTTPCTL="${ihs_Path}/bin/apachectl"
+
+set -e
+if [ ! -x ${ihs_Path}/bin/httpd ] ; then
+	echo "No IBM HTTP Server installed"
+	exit 0
+fi
+
+start() {
+    echo -n $"Starting ${NAME} service: "
+       $IBMHTTPCTL -k start; > /dev/null
+    ret=$? 
+    if [ $ret -eq 0 ]
+    then
+            echo "${NAME} Started."
+    else
+            echo "${NAME} Starting Failed!"
+            exit 1
+    fi
+    echo
+}
+
+stop() {
+    echo -n $"Stopping ${NAME} service: "
+    $IBMHTTPCTL -k stop > /dev/null
+
+    ret=$?
+    if [ $ret -eq 0 ]
+    then
+            echo "${NAME} Stop Success."
+    else
+            echo "${NAME} Stop Failed!"
+            exit 1
+    fi
+    echo
+}
+
+graceful() {
+    echo -n $"graceful ${NAME} service: "
+    $IBMHTTPCTL -k graceful
+	ret=$?
+    if [ $ret -eq 0 ]
+    then
+            echo "graceful Success."
+    else
+            echo "graceful Failed!"
+            exit 1
+    fi
+    echo
+}
+
+restart() {
+    echo -n $"Restart ${NAME} service: "
+    $IBMHTTPCTL -k restart
+	ret=$?
+    if [ $ret -eq 0 ]
+    then
+            echo "restart Success."
+    else
+            echo "restart Failed!"
+            exit 1
+    fi
+    echo
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    graceful)
+        graceful
+        ;;
+    restart)
+        restart
+        ;;		
+    *)
+        echo $"Usage: $0 {start|stop|graceful|restart}"
+        exit 1
+esac
+exit 0
